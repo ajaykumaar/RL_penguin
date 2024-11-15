@@ -1,0 +1,106 @@
+ <mujoco model="torque_robot">
+	<compiler angle="radian" meshdir="meshes"/>
+	<visual>
+		<map force="0.1" zfar="60"/>
+		<global elevation="-20" azimuth="120"/>
+	</visual>
+
+	<option integrator="RK4" iterations="50" solver="PGS" timestep="0.003"/>
+
+	<asset>
+		<mesh file="right_hip.STL"/>
+		<mesh file="motorcap.STL"/>
+		<mesh file="right_leg.STL"/>
+		<mesh file="link.STL"/>
+		<mesh file="left_hip.STL"/>
+		<mesh file="left_leg.STL"/>
+		<mesh file="bodyaxle.STL"/>
+		<mesh file="body_gear.STL"/>
+		<mesh file="sim_gear.STL"/>
+		<mesh file="combined_axle.STL"/>
+		<mesh file="pendulum_assembly.STL"/>
+		<texture builtin="checker" height="100" name="texplane" rgb1="0 0 0" rgb2="0.8 0.8 0.8" type="2d" width="100"/>
+		<material name="MatPlane" reflectance="0.5" shininess="1" specular="1" texrepeat="60 60" texture="texplane"/>
+	</asset>
+	<worldbody>
+		<light directional="true" pos="-0.5 0.5 3" dir="0 0 -1"/>
+		<geom material="MatPlane" name="floor" pos="0 0 0" size="1 1 1" type="plane" rgba="1 0.83 0.51 0.5" friction="0.8 0.0001 0.00005"/>
+		<body name="axle" pos="0 0 .14" xyaxes="0 1 0 1 0 0">
+			<camera name="track" mode="trackcom" pos = "-.6 .05 -.1" xyaxes=".1 1 -.1 .1 .1 -1"/>
+			<freejoint name="root"/>
+			<geom name="axle" type="mesh" mesh="combined_axle" pos="0 0 0"/>
+			<inertial pos ="0 0 0" mass="0.02750395" diaginertia="0.00001515 0.00001894 0.00003350"/>
+			<body name="right_hip" pos="0 -.022705 0" xyaxes="0 -1 0 0 0 -1">
+				<joint name="revolute_right_hip" axis="1 0 0" pos="0 0 0" frictionloss=".01"/>
+				<geom name="right_hip" type="mesh" mesh="right_hip" pos="0 0 0"/>
+				<inertial pos="0.02154 -0.03608 0.00580" mass="0.07212578" diaginertia="0.00004009 0.00001644 0.00003295"/>
+				<body name="motorcap_right" pos="0.042515 -0.036240 0.009754" xyaxes="0 0 -1 -1 0 0">
+					<joint name="revolute_right_motorcap" axis="0 1 0" pos="0 0 0" limited="true" range="-1.578 1.578" solreflimit="0.004 1" frictionloss=".01"/>
+					<geom name="motorcap_right" type="mesh" mesh="motorcap" pos="0 0 0"/>
+					<inertial pos="0.001003 0.002632 0" mass="0.001765709" diaginertia="0.000000042 0.000000095 0.000000062"/>
+					<body name="link_right" pos="0.009969 -0.000276 0" xyaxes="-0.22048 0 -0.975389 0 1 0">
+						<joint name="revolute_right_link" axis="0 1 0" pos="0 0 0" frictionloss=".01"/><!-- Don't care-->
+						<geom name="link_right" type="mesh" mesh="link" pos="0 0 0"/>
+						<inertial pos="0.025314 -0.001603 0" mass=".002048618" diaginertia="0.000000045 0.0000000619 0.0000000599"/>
+					</body>
+				</body>
+				<body name="right_leg" pos="0.022753 -0.06739 0.009754" xyaxes="1 0 0 0 0 -1">
+					<joint name="prismatic_right_leg" type="slide" axis="0 0 1" pos="0 0 0" frictionloss="0.01"/> <!-- Don't care-->
+					<geom name="right_leg" type="mesh" mesh="right_leg" pos="0 0 0" friction="0.8 0.0001 0.00005"/>
+					<inertial pos="0.00241 -0.00080 -0.04178" mass="0.07117" diaginertia=".00006 .00005 .00005"/>
+				</body>
+			</body>
+			<body name="left_hip" pos="0 0.022705 0" xyaxes="0 -1 0 0 0 -1">
+				<joint name="revolute_left_hip" axis="1 0 0" pos="0 0 0" frictionloss="0.01"/>
+				<geom name="left_hip" type="mesh" mesh="left_hip" pos="0 0 0"/>
+				<inertial pos="-0.02154 -0.03608 0.00580" mass="0.07212578" diaginertia="0.00004009 0.00001644 0.00003295"/>
+				<body name="motorcap_left" pos="-0.042515 -0.036240 0.009754" xyaxes="0 0 -1 1 0 0">
+					<joint name="revolute_left_motorcap" axis="0 1 0" pos="0 0 0" limited="true" range="-1.578 1.578" solreflimit="0.004 1" frictionloss="0.01"/>
+					<geom name="motorcap_left" type="mesh" mesh="motorcap" pos="0 0 0"/>
+					<inertial pos="0.001003 0.002632 0" mass="0.001765709" diaginertia="0.000000042 0.000000095 0.000000062"/>
+					<body name="link_left" pos="0.009969 -0.000276 0" xyaxes="-0.22048 0 0.975389 0 1 0">
+						<joint name="revolute_left_link" axis="0 1 0" pos="0 0 0" frictionloss=".01"/> <!-- Don't care -->
+						<geom name="link_left" type="mesh" mesh="link" pos="0 0 0"/>
+						<inertial pos="0.025314 -0.001603 0" mass=".002048618" diaginertia="0.000000045 0.0000000619 0.0000000599"/>
+					</body>
+				</body>
+				<body name="left_leg" pos="-0.022753 -0.06739 0.009754" xyaxes="1 0 0 0 0 -1">
+					<joint name="prismatic_left_leg" type="slide" axis="0 0 1" pos="0 0 0" frictionloss="0.01"/> <!-- DOn't care-->
+					<geom name="left_leg" type="mesh" mesh="left_leg" pos="0 0 0" friction="0.8 0.0001 0.00005"/>
+					<inertial pos= "-0.00241 -0.00080 -0.04178" mass="0.07117" diaginertia="0.00006 0.00005 0.00005"/>
+				</body>
+			</body>
+
+			<body name="rear_gear" pos=".014157 0 0" xyaxes="-1 0 0 0 1 0">
+				<joint name="rear_gear_revolute" axis="1 0 0" pos="0 0 0" frictionloss="0.01"/> <!-- Don't care-->
+				<geom name="body_gear_rear" type="mesh" mesh="sim_gear" pos="0 0 0"/>
+				<inertial pos="-0.00524727 0 0" mass="0.01013870" diaginertia="0.00000415 0.00000222 0.00000223"/>
+			</body>
+
+			<body name="front_gear" pos="-.014157 0 0" xyaxes="1 0 0 0 1 0">
+				<joint name="front_gear_revolute" axis="1 0 0" pos="0 0 0" frictionloss="0.01"/> <!-- Don't care -->
+				<geom name="body_gear_front" type="mesh" mesh = "sim_gear" pos="0 0 0"/>
+				<inertial pos="-0.00524727 0 0" mass="0.01013870" diaginertia="0.00000415 0.00000222 0.00000223"/>
+			</body>
+			
+			<!--<body name="pendulum" pos="0 0 0" xyaxes="-1 0 0 0 0 -1">
+				<joint name="pendulum_revolute" axis="1 0 0" pos="0 0 0" frictionloss="0.01"/>
+				<geom name="pendulum" type="mesh" mesh="pendulum_assembly" pos="0 0 0"/>
+				<inertial pos="-0.00298743 0.06808085 0" mass="0.016141013" diaginertia="0.000013442 0.000007015 0.000018117"/>
+			</body>-->
+		</body>
+	</worldbody>
+	
+	<equality>
+		<connect name="right_leg_pivot" active="true" solref="0.004 1" body1="link_right" body2="right_leg" anchor="0.045212 0 0"/>
+		<connect name="left_leg_pivot" active="true" solref="0.004 1" body1="link_left" body2="left_leg" anchor="0.045212 0 0"/>
+		<joint name="right_leg_rear_gear" solref="0.004 1" joint1="rear_gear_revolute" joint2="revolute_right_hip" polycoef="0 2 0 0 0"/>
+		<joint name="left_leg_rear_gear" solref="0.004 1" joint1="rear_gear_revolute" joint2="revolute_left_hip" polycoef="0 -2 0 0 0"/>
+		<joint name="front_gear_rear_gear" solref="0.004 1" joint1="front_gear_revolute" joint2="rear_gear_revolute" polycoef="0 1 0 0 0"/>
+	</equality>
+	<actuator>
+		<motor name="servo_right" ctrllimited="true" ctrlrange="-.078 .078" lengthrange="-1.578 1.578" joint="revolute_right_motorcap"/>
+		<motor name="servo_left" ctrllimited="true" ctrlrange="-.078 .078" lengthrange="-1.578 1.578" joint="revolute_left_motorcap"/>
+		<!--<motor name="servo_pendulum" ctrllimited="true" ctrlrange="-.15 0.15" lengthrange="-1.04 1.04" gear="2 0 0 0 0 0" joint="pendulum_revolute"/>-->
+	</actuator>
+</mujoco>
